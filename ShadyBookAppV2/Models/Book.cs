@@ -9,7 +9,7 @@ namespace ShadyBookAppV2
         public ulong Id { get; set; } //ISBN
 
         
-        public int? AuthorsId { get; set; }
+        public int AuthorsId { get; set; }
 
         [Required]
         public string Title { get; set; }

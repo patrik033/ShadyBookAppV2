@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShadyBookAppV2;
 
@@ -11,9 +12,10 @@ using ShadyBookAppV2;
 namespace ShadyBookAppV2.Migrations
 {
     [DbContext(typeof(ShadyBookAppContext))]
-    partial class ShadyBookAppContextModelSnapshot : ModelSnapshot
+    [Migration("20211227093653_authorsID")]
+    partial class authorsID
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

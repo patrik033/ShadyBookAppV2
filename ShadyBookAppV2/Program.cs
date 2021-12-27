@@ -2,7 +2,9 @@
 using ShadyBookAppV2;
 using ShadyBookAppV2.Models;
 
-JoinAuthorAndBooks();
+
+
+UpdateAuthor("1990-04-25",3);
 Console.WriteLine("Adding completed!");
 Console.ReadLine();
 
@@ -47,31 +49,52 @@ void AddGenres()
 }
 
 //Authors
-void AddAuthors()
+void UpdateAuthor(string date,int id)
 {
     using (var context = new ShadyBookAppContext())
     {
-        var authors = new List<Author>()
+        DateTime n = Convert.ToDateTime(date);
+        var au = context.Authors.Where(x => x.Id == id).FirstOrDefault();
+        au.BirthDate = n;
+        context.SaveChanges();
+    }
+}
+DateTime ConvertToDateTime(string date)
+{
+    try
+    {
+        DateTime newDate = Convert.ToDateTime(date);
+        return newDate;
+    }
+    catch
+    {
+        return Convert.ToDateTime("2000-01-01");
+    }
+}
+void AddAuthorsUi()
+{
+    Console.Write("Förnamn: ");
+    string fName = Console.ReadLine();
+
+    Console.Write("EfterNamn: ");
+    string lName = Console.ReadLine();
+
+    Console.Write("Födelsedatum, ange XXXX-XX-XX: ");
+    string date = Console.ReadLine();
+
+    AddAuthors(fName, lName, date);
+}
+void AddAuthors(string firstName, string lastName, string? date)
+{
+    using (var context = new ShadyBookAppContext())
+    {
+        var authors = new Author
         {
-            new Author()
-            {
-                FirstName = "Mikael",
-                LastName = "Nilsson",
-                BirthDate = new DateTime(1990,03,11)
-            },
-            new Author()
-            {
-                FirstName = "Claes",
-                LastName = "Engelin",
-                BirthDate= new DateTime(1956,04,23)
-            },
-            new Author()
-            {
-                FirstName = "Patrik",
-                LastName = "Beijar Odh"
-            }
+            FirstName = firstName,
+            LastName = lastName,
+            BirthDate = ConvertToDateTime(date)
         };
-        context.Authors.AddRange(authors);
+        context.Authors.Add(authors);
         context.SaveChanges();
     }
 }
@@ -87,41 +110,63 @@ void ListAllAuthors()
     }
 }
 
-//Stores
-void AddStores()
+void JoinAuthorAndBooks()
 {
     using (var context = new ShadyBookAppContext())
     {
-        var stores = new List<Store>()
+
+        var data2 = from a in context.Set<Author>()
+                    join b in context.Set<Book>()
+                    on a.Id equals b.AuthorsId
+                    group b by a.FirstName into a2
+                    select new
+                    {
+                        Author = a2.Key,
+                        Book = a2.Select(book => book)
+                    };
+        foreach (var item in data2)
         {
-            new Store()
+            Console.WriteLine(item.Author);
+            foreach (var Book in item.Book)
             {
-                StoreName = "Classes Bibliotek",
-                Address = "Stora vägen 123"
-            },
-            new Store()
-            {
-                StoreName = "Amazon",
-                Address = "Lilla vägen 123"
-            },
-            new Store()
-            {
-                StoreName = "Ebay",
-                Address = "Mellan vägen 321"
+                Console.WriteLine($"    {Book.Title}");
             }
-        };
-        context.Stores.AddRange(stores);
+        }
+        Console.WriteLine();
+    }
+}
+void DeleteAuthorWithBooks(int id)
+{
+    using (var context = new ShadyBookAppContext())
+    {
+        var author = context.Authors.Single(a => a.Id == id);
+        var books = context.Books.Where(b => b.AuthorsId == id);
+        foreach (var book in books)
+        {
+            if (author != null)
+            {
+                author.Books.Remove(book);
+            }
+            else
+            {
+                Console.WriteLine("Author not found");
+            }
+        }
+        context.Remove(author);
         context.SaveChanges();
     }
 }
-void ListAllStores()
+
+//Books
+void ListAllBooks()
 {
     using (var context = new ShadyBookAppContext())
     {
-        var store = context.Stores.ToList();
-        foreach (var item in store)
+        var books = context.Books.ToList();
+
+        foreach (var item in books)
         {
-            Console.WriteLine($"{item.Id}: {item.StoreName}, {item.Address}");
+            Console.WriteLine($"Id: {item.Id}, Title: {item.Title}, AuthorsId: {item.AuthorsId} ");
         }
     }
 }
@@ -169,8 +214,47 @@ void AddAll()
         context.SaveChanges();
     }
 }
+void JoinExistingBooksAndAuthors()
+{
+    using (var db = new ShadyBookAppContext())
+    {
+        var s = db.Books.FirstOrDefault();
+        var c = db.Authors.FirstOrDefault();
 
 
+        s.Authors.Add(c);
+        db.SaveChanges();
+    }
+}
+void RemoveBook(ulong id)
+{
+    using (var db = new ShadyBookAppContext())
+    {
+        var result = new Book
+        {
+            Id = id,
+        };
+
+        db.Entry(result).State = EntityState.Deleted;
+        db.SaveChanges();
+    }
+}
+void RemoveAuthor()
+{
+    using (var db = new ShadyBookAppContext())
+    {
+        var result = new Author
+        {
+            Id = 2,
+        };
+
+        db.Entry(result).State = EntityState.Deleted;
+
+        db.SaveChanges();
+
+    }
+}
+//TODO : specifiera
 void UpdateAuthorsWithNewBooks(int id)
 {
     using (var context = new ShadyBookAppContext())
@@ -178,7 +262,7 @@ void UpdateAuthorsWithNewBooks(int id)
         var author = context.Authors.Find(id);
         if (author != null)
         {
-            author.Books.Add(new Book() { Title = "Robins Finska Karameller", Price = 24, GenreId = 1 });
+            author.Books.Add(new Book() { Title = "Robins Finska Karameller", Price = 24, GenreId = 1,AuthorsId = 1 });
             context.SaveChanges();
         }
         else
@@ -186,29 +270,88 @@ void UpdateAuthorsWithNewBooks(int id)
     }
 }
 
-void JoinAuthorAndBooks()
+
+//Stores
+void AddStores()
 {
     using (var context = new ShadyBookAppContext())
     {
-
-        var data2 = from a in context.Set<Author>()
-                    join b in context.Set<Book>()
-                    on a.Id equals b.AuthorsId
-                    group b by a.FirstName into a2
-                    select new
-                    {
-                        Author = a2.Key,
-                        Book = a2.Select(book => book)
-                    };
-        foreach (var item in data2)
+        var stores = new List<Store>()
         {
-            Console.WriteLine(item.Author);
-            foreach (var Book in item.Book)
+            new Store()
             {
-                Console.WriteLine($"    {Book.Title}");
+                StoreName = "Classes Bibliotek",
+                Address = "Stora vägen 123"
+            },
+            new Store()
+            {
+                StoreName = "Amazon",
+                Address = "Lilla vägen 123"
+            },
+            new Store()
+            {
+                StoreName = "Ebay",
+                Address = "Mellan vägen 321"
             }
-        }
-        Console.WriteLine();
+        };
+        context.Stores.AddRange(stores);
+        context.SaveChanges();
     }
 }
+void ListAllStores()
+{
+    using (var context = new ShadyBookAppContext())
+    {
+        var store = context.Stores.ToList();
+        foreach (var item in store)
+        {
+            Console.WriteLine($"{item.Id}: {item.StoreName}, {item.Address}");
+        }
+    }
+}
+void AddToStore()
+{
+    ListAllBooks();
+    Console.Write("Skriv in ett id: ");
+    ulong id = ulong.Parse(Console.ReadLine());
+
+    Console.WriteLine();
+
+    ListAllStores();
+    Console.Write("Vilken affär vill du fylla på?: ");
+    int storeId = int.Parse(Console.ReadLine());
+
+    Console.WriteLine();
+
+    Console.WriteLine("Hur många böcker vill du lägga till: ");
+    int quantity = int.Parse(Console.ReadLine());
+
+
+
+
+    using (var context = new ShadyBookAppContext())
+    {
+        var s = context.Stocks.Where(x => x.StoreId == storeId && x.BookId == id).FirstOrDefault();
+        if (s == null)
+        {
+            var st = new Stock
+            {
+                StoreId = storeId,
+                BookId = id,
+                StockItem = quantity
+            };
+            context.Add(st);
+            context.SaveChanges();
+        }
+        else
+        {
+            s.StockItem += quantity;
+            context.SaveChanges();
+        }
+    }
+}
+
+
+
+
 
