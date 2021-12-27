@@ -1,7 +1,8 @@
-﻿using ShadyBookAppV2;
+﻿using Microsoft.EntityFrameworkCore;
+using ShadyBookAppV2;
 using ShadyBookAppV2.Models;
 
-UpdateAuthorsWithNewBooks(3);
+JoinAuthorAndBooks();
 Console.WriteLine("Adding completed!");
 Console.ReadLine();
 
@@ -184,3 +185,30 @@ void UpdateAuthorsWithNewBooks(int id)
             Console.WriteLine("Det finns ingen författare med det id:t");
     }
 }
+
+void JoinAuthorAndBooks()
+{
+    using (var context = new ShadyBookAppContext())
+    {
+
+        var data2 = from a in context.Set<Author>()
+                    join b in context.Set<Book>()
+                    on a.Id equals b.AuthorsId
+                    group b by a.FirstName into a2
+                    select new
+                    {
+                        Author = a2.Key,
+                        Book = a2.Select(book => book)
+                    };
+        foreach (var item in data2)
+        {
+            Console.WriteLine(item.Author);
+            foreach (var Book in item.Book)
+            {
+                Console.WriteLine($"    {Book.Title}");
+            }
+        }
+        Console.WriteLine();
+    }
+}
+
