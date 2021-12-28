@@ -4,7 +4,7 @@ using ShadyBookAppV2.Models;
 
 
 
-UpdateAuthor("1990-04-25",3);
+ListStoreAndBookAndStock();
 Console.WriteLine("Adding completed!");
 Console.ReadLine();
 
@@ -49,7 +49,7 @@ void AddGenres()
 }
 
 //Authors
-void UpdateAuthor(string date,int id)
+void UpdateAuthor(string date, int id)
 {
     using (var context = new ShadyBookAppContext())
     {
@@ -262,7 +262,7 @@ void UpdateAuthorsWithNewBooks(int id)
         var author = context.Authors.Find(id);
         if (author != null)
         {
-            author.Books.Add(new Book() { Title = "Robins Finska Karameller", Price = 24, GenreId = 1,AuthorsId = 1 });
+            author.Books.Add(new Book() { Title = "Robins Finska Karameller", Price = 24, GenreId = 1, AuthorsId = 1 });
             context.SaveChanges();
         }
         else
@@ -347,6 +347,28 @@ void AddToStore()
         {
             s.StockItem += quantity;
             context.SaveChanges();
+        }
+    }
+}
+void ListStoreAndBookAndStock()
+{
+    using (var context = new ShadyBookAppContext())
+    {
+        var data = (from b in context.Books
+                    join st in context.Stocks
+                     on b.Id equals st.BookId 
+                    join stc in context.Stores
+                    on st.StoreId equals stc.Id into left
+                    from left2 in left.DefaultIfEmpty()
+                    select new
+                    {
+                        StoreName = (left2 == null ? "null" : left2.StoreName ),
+                        StockAmount = st.StockItem,
+                        BookName = b.Title
+                    }).ToList();
+        foreach (var item in data)
+        {
+            Console.WriteLine($"Store Name: {item.StoreName} Quantity: {item.StockAmount} Title: {item.BookName}");
         }
     }
 }
