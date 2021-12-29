@@ -54,8 +54,8 @@ namespace ShadyBookAppV2
                 {
                     Author a1 = new Author
                     {
-                        FirstName = "Måns",
-                        LastName = "Karlsson",
+                        FirstName = "Claes",
+                        LastName = "Engelin",
                         BirthDate = new DateTime(1990, 08, 25)
                     };
                     Author a2 = new Author
@@ -90,7 +90,7 @@ namespace ShadyBookAppV2
                     };
                     Book b1 = new Book
                     {
-                        Title = "Mammas Liljor",
+                        Title = "Spagetti alá kod",
                         Price = 199.00M,
                         GenreId = 4,
                         AuthorsId =1,
@@ -99,7 +99,7 @@ namespace ShadyBookAppV2
                     };
                     Book b2 = new Book
                     {
-                        Title = "Måns Natt",
+                        Title = "Köttbullar med Claes",
                         Price = 299.00M,
                         GenreId = 1,
                         AuthorsId = 1,
