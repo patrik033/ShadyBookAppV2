@@ -4,7 +4,7 @@ using ShadyBookAppV2.Models;
 
 
 
-ListStoreAndBookAndStock();
+JoinAuthorAndBooks();
 Console.WriteLine("Adding completed!");
 Console.ReadLine();
 
@@ -255,14 +255,28 @@ void RemoveAuthor()
     }
 }
 //TODO : specifiera
-void UpdateAuthorsWithNewBooks(int id)
+void UpdateAuthorsWithNewBooks()
 {
     using (var context = new ShadyBookAppContext())
     {
-        var author = context.Authors.Find(id);
+
+        ListAllAuthors();
+        Console.Write("Please enter an author to add a book to: ");
+        int choice = int.Parse(Console.ReadLine());
+        Console.Write("Please enter title: ");
+        string title = Console.ReadLine();
+        Console.Write("Please enter a price: ");
+        decimal price = decimal.Parse(Console.ReadLine());
+        ListAllGenres();
+        Console.Write("Please enter a genre: ");
+        int genreId = int.Parse(Console.ReadLine());
+
+
+
+        var author = context.Authors.Find(choice);
         if (author != null)
         {
-            author.Books.Add(new Book() { Title = "Robins Finska Karameller", Price = 24, GenreId = 1, AuthorsId = 1 });
+            author.Books.Add(new Book() { Title = title, Price = price, GenreId = genreId, AuthorsId = choice });
             context.SaveChanges();
         }
         else
