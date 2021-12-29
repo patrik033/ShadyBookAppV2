@@ -4,7 +4,7 @@ using ShadyBookAppV2.Models;
 
 
 
-UpdateBook(9789188876655, 4, "Lilla hunden på prärien", 32.89M, "2020-01-23", 2);
+JoinStoreAndBookAndStock();
 Console.ReadLine();
 
 
@@ -416,13 +416,13 @@ void JoinExistingBooksAndAuthors()
 }
 
 
-void Startup()
+void StartUp()
 {
     DataBaseFiles.AddStartupGenres();
     DataBaseFiles.AddStarterAuthorsAndBooks();
     DataBaseFiles.AddStarterStores();
     DataBaseFiles.AddStarterToStores();
-    string hello;
+    
         
     
 }

@@ -93,6 +93,7 @@ namespace ShadyBookAppV2
                         Title = "Mammas Liljor",
                         Price = 199.00M,
                         GenreId = 4,
+                        AuthorsId =1,
                         ReleaseDate = new DateTime(2010, 05, 15)
 
                     };
@@ -101,6 +102,7 @@ namespace ShadyBookAppV2
                         Title = "Måns Natt",
                         Price = 299.00M,
                         GenreId = 1,
+                        AuthorsId = 1,
                         ReleaseDate = new DateTime(2011, 06, 25)
                     };
                     Book b3 = new Book
@@ -108,6 +110,7 @@ namespace ShadyBookAppV2
                         Title = "Ananas Dansen",
                         Price = 99.00M,
                         GenreId = 5,
+                        AuthorsId = 2,
                         ReleaseDate = new DateTime(2015, 09, 01)
                     };
                     Book b4 = new Book
@@ -115,6 +118,7 @@ namespace ShadyBookAppV2
                         Title = "Alien Invasion",
                         Price = 599.00M,
                         GenreId = 1,
+                        AuthorsId = 2,
                         ReleaseDate = new DateTime(2020, 01, 04)
                     };
                     Book b5 = new Book
@@ -122,6 +126,7 @@ namespace ShadyBookAppV2
                         Title = "Emil i Jönköping",
                         Price = 299.00M,
                         GenreId = 4,
+                        AuthorsId = 3,
                         ReleaseDate = new DateTime(2010, 04, 01)
                     };
                     Book b6 = new Book
@@ -129,6 +134,7 @@ namespace ShadyBookAppV2
                         Title = "SockerKråkan",
                         Price = 399.00M,
                         GenreId = 2,
+                        AuthorsId = 3,
                         ReleaseDate = new DateTime(2011, 06, 07)
                     };
                     Book b7 = new Book
@@ -136,6 +142,7 @@ namespace ShadyBookAppV2
                         Title = "Barnen i tysta byn",
                         Price = 399.00M,
                         GenreId = 1,
+                        AuthorsId = 4,
                         ReleaseDate = new DateTime(2012, 07, 07)
                     };
                     Book b8 = new Book
@@ -143,6 +150,7 @@ namespace ShadyBookAppV2
                         Title = "Silence of the cows",
                         Price = 199.00M,
                         GenreId = 2,
+                        AuthorsId = 4,
                         ReleaseDate = new DateTime(2013, 06, 27)
                     };
                     Book b9 = new Book
@@ -150,6 +158,7 @@ namespace ShadyBookAppV2
                         Title = "Pippi Kortstrumpa",
                         Price = 399.00M,
                         GenreId = 5,
+                        AuthorsId = 5,
                         ReleaseDate = new DateTime(2015, 10, 16)
                     };
                     Book b10 = new Book
@@ -157,6 +166,7 @@ namespace ShadyBookAppV2
                         Title = "Let them sleep",
                         Price = 599.00M,
                         GenreId = 1,
+                        AuthorsId = 5,
                         ReleaseDate = new DateTime(2020, 12, 24)
                     };
                     Book b11 = new Book
@@ -164,6 +174,7 @@ namespace ShadyBookAppV2
                         Title = "McGyver can´t make something",
                         Price = 399.00M,
                         GenreId = 5,
+                        AuthorsId = 6,
                         ReleaseDate = new DateTime(2013, 06, 24)
                     };
                     Book b12 = new Book
@@ -171,6 +182,7 @@ namespace ShadyBookAppV2
                         Title = "Mumin på bergen",
                         Price = 699.00M,
                         GenreId = 4,
+                        AuthorsId = 6,
                         ReleaseDate = new DateTime(2010, 04, 03)
                     };
                     a1.Books = new List<Book> { b1, b2 };
@@ -367,6 +379,24 @@ namespace ShadyBookAppV2
                         StoreId = 3,
                         StockItem = 10
                     },
+                       new Stock()
+                    {
+                        BookId = 9789188876661,
+                        StoreId = 1,
+                        StockItem = 10
+                    },
+                      new Stock()
+                    {
+                        BookId = 9789188876661,
+                        StoreId = 2,
+                        StockItem = 10
+                    },
+                      new Stock()
+                    {
+                        BookId = 9789188876661,
+                        StoreId = 3,
+                        StockItem = 10
+                    },
                      new Stock()
                     {
                         BookId = 9789188876662,
@@ -421,6 +451,7 @@ namespace ShadyBookAppV2
                         StoreId = 3,
                         StockItem = 10
                     },
+
 
 
 
