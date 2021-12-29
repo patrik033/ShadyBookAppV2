@@ -416,7 +416,16 @@ void JoinExistingBooksAndAuthors()
 }
 
 
-
+void Startup()
+{
+    DataBaseFiles.AddStartupGenres();
+    DataBaseFiles.AddStarterAuthorsAndBooks();
+    DataBaseFiles.AddStarterStores();
+    DataBaseFiles.AddStarterToStores();
+    string hello;
+        
+    
+}
 
 
 
