@@ -3,8 +3,10 @@ using ShadyBookAppV2;
 using ShadyBookAppV2.Models;
 
 
+JoinStoreAndBookAndStock();
+//JoinAuthorAndBooks();
 
-UpdateBook(9789188876655, 4, "Lilla hunden på prärien", 32.89M, "2020-01-23", 2);
+//UpdateBook(9789188876655, 4, "Lilla hunden på prärien", 32.89M, "2020-01-23", 2);
 Console.ReadLine();
 
 
@@ -349,14 +351,15 @@ void RemoveAuthor()
 #endregion
 
 
+
 #region QueriesForJoinTables
 void JoinAuthorAndBooks()
 {
     using (var context = new ShadyBookAppContext())
     {
 
-        var data2 = from a in context.Set<Author>()
-                    join b in context.Set<Book>()
+        var data2 = from a in context.Authors
+                    join b in context.Books
                     on a.Id equals b.AuthorsId
                     group b by a.FirstName into a2
                     select new
@@ -400,7 +403,17 @@ void JoinStoreAndBookAndStock()
 #endregion
 
 
-
+//Ladda in dummy data till databasen
+void StartUp()
+{
+    DataBaseFiles.AddStartupGenres();
+    DataBaseFiles.AddStarterAuthorsAndBooks();
+    DataBaseFiles.AddStarterStores();
+    DataBaseFiles.AddStarterToStores();
+    string hello;
+        
+    
+}
 //Unödig?
 void JoinExistingBooksAndAuthors()
 {
@@ -416,16 +429,6 @@ void JoinExistingBooksAndAuthors()
 }
 
 
-void Startup()
-{
-    DataBaseFiles.AddStartupGenres();
-    DataBaseFiles.AddStarterAuthorsAndBooks();
-    DataBaseFiles.AddStarterStores();
-    DataBaseFiles.AddStarterToStores();
-    string hello;
-        
-    
-}
 
 
 
