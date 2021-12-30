@@ -93,7 +93,7 @@ namespace ShadyBookAppV2
                         Title = "Spagetti alá kod",
                         Price = 199.00M,
                         GenreId = 4,
-                        AuthorsId =1,
+                        AuthorsId = 1,
                         ReleaseDate = new DateTime(2010, 05, 15)
 
                     };
