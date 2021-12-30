@@ -7,22 +7,122 @@ using ShadyBookAppV2.Models;
 //Och databasen är skapad!
 string[] funcitons = new string[] {"Startup (Only run once!)","ListAllGenres", "ListAllAuthors", "ListAllBooks", "ListAllStores",
     "ShowAuthorWithBooks","ShowStoresWithBooksAndStocks",
-"-------------------------", "AddToStore", "AddAuthor","AddBook", "-------------------------", 
-"Update Author", "Update Book","-------------------------", "Delete author with books", 
+"-------------------------", "AddToStore", "AddAuthor","AddBook", "-------------------------",
+"Update Author", "Update Book","-------------------------", "Delete author with books",
     "Delete book", "Delete books from store" };
 
 int x = 0;
-while (x != funcitons.Length +1 ) 
+while (x != funcitons.Length)
 {
-
+    Console.Clear();
     for (int i = 0; i < funcitons.Length; i++)
     {
         Console.WriteLine($"[{i + 1}] {funcitons[i]}");
     }
     Console.WriteLine($"[{funcitons.Length + 1}] Exit");
-     x = int.Parse(Console.ReadLine());
+    x = int.Parse(Console.ReadLine());
     Console.Clear();
+    switch (x)
+    {
+        case 1:
+            {
+                StartUp();
+                Console.ReadLine();
+                break;
+            }
+        case 2:
+            {
+                ListAllGenres();
+                Console.ReadLine();
+                break;
+            }
+        case 3:
+            {
+                ListAllAuthors();
+                Console.ReadLine();
+                break;
+            }
+        case 4:
+            {
+                ListAllBooks();
+                Console.ReadLine();
+                break;
+            }
+        case 5:
+            {
+                ListAllStores();
+                Console.ReadLine();
+                break;
+            }
+        case 6:
+            {
+                ShowAuthorWithBooks();
+                Console.ReadLine();
+                break;
+            }
+        case 7:
+            {
+                ShowStoresWithBooksWithStocks();
+                Console.ReadLine();
+                break;
+            }
+        case 9:
+            {
+                AddToStore();
+                Console.ReadLine();
+                break;
+            }
+        case 10:
+            {
+                AddAuthorsUi();
+                Console.ReadLine();
+                break;
+            }
+        case 11:
+            {
+                UpdateAuthorsWithNewBooks();
+                Console.ReadLine();
+                break;
+            }
+        case 13:
+            {
+                UpdateAuthor();
+                Console.ReadLine();
+                break;
+            }
+        case 14:
+            {
+                UpdateBook();
+                Console.ReadLine();
+                break;
+            }
+        case 16:
+            {
+                DeleteAuthorWithBooks();
+                Console.ReadLine();
+                break;
+            }
+        case 17:
+            {
+                DeleteBook();
+                Console.ReadLine();
+                break;
+
+            }
+        case 18:
+            {
+                DeleteFromStore();
+                Console.ReadLine();
+                break;
+            }
+        default:
+            {
+                break;
+            }
+    }
+
 }
+
 
 //StartUp();
 UpdateAuthorsWithNewBooks();
@@ -204,6 +304,10 @@ void AddToStore()
 
     using (var context = new ShadyBookAppContext())
     {
+        var std = from Store in context.Stores
+                  where Store.Id == storeId
+                  select Store;
+
         bool ifFindStore = context.Stores.Select(x => x.Id == storeId).FirstOrDefault();
         bool ifFindBook = context.Books.Select(y => y.Id == id).FirstOrDefault();
         if (ifFindStore == true && ifFindBook == true)
@@ -447,7 +551,7 @@ void DeleteBook()
     {
         var book = context.Books.Find(isUlong);
 
-     
+
         if (book != null)
         {
             context.Entry(book).State = EntityState.Deleted;
