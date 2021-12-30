@@ -3,8 +3,8 @@ using ShadyBookAppV2;
 using ShadyBookAppV2.Models;
 
 
-
-JoinStoreAndBookAndStock();
+RemoveFromStore();
+Console.WriteLine("Du e klar");
 Console.ReadLine();
 
 
@@ -194,6 +194,43 @@ void AddToStore()
         }
     }
 }
+
+void RemoveFromStore()
+{
+
+    ListAllBooks();
+    Console.Write("Type a Book ID: ");
+    ulong id = ulong.Parse(Console.ReadLine());
+
+    Console.WriteLine();
+
+    ListAllStores();
+    Console.Write("What Store do you wish to remove from (Store ID)?: ");
+    int storeId = int.Parse(Console.ReadLine());
+
+    
+
+
+
+
+    using (var context = new ShadyBookAppContext())
+    {
+        var s = context.Stocks.Where(x => x.StoreId == storeId && x.BookId == id).FirstOrDefault();
+        if (s != null)
+        {
+            
+            context.Remove(s);
+            context.SaveChanges();
+        }
+        else
+        {
+            Console.WriteLine("The BookID och the StoreID or the combination does not exist or is already null");
+        }
+    }
+
+
+}
+
 #endregion
 
 #region AddAuthors
@@ -422,9 +459,9 @@ void StartUp()
     DataBaseFiles.AddStarterAuthorsAndBooks();
     DataBaseFiles.AddStarterStores();
     DataBaseFiles.AddStarterToStores();
-    
-        
-    
+
+
+
 }
 
 
