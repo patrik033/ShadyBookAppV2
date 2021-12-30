@@ -2,9 +2,20 @@
 using ShadyBookAppV2;
 using ShadyBookAppV2.Models;
 
+
+//HuvudProgrammet, Starta men "StartUp" när alla paketen är installerade
+//Och databasen är skapad!
+string[] funcitons = new string[] {"ListAllGenres", "ListAllAuthors", "ListAllBooks", "ListAllStores",
+    "ShowAuthorWithBooks","ShowStoresWithBooksAndStocks",
+"-------------------------", "AddToStore", "AddAuthor", };
+
+Console.WriteLine("[1]");
+
+//StartUp();
 //DeleteFromStore();
-AddToStore();
-//JoinAuthorAndBooks();
+//AddToStore();
+//ShowAuthorWithBooks();
+//ShowStoresWithBooksAndStocks();
 //ListAllBooks();
 //ListAllAuthors();
 //DeleteAuthorWithBooks();
@@ -204,9 +215,6 @@ void AddToStore()
             Console.WriteLine("BookID or StoreID does not exist");
     }
 }
-
-
-
 #endregion
 
 #region AddAuthors
@@ -313,7 +321,7 @@ void UpdateAuthorsWithNewBooks()
 
         ListAllAuthors();
         Console.Write("Please enter an author to add a book to: ");
-        int choice = int.Parse(Console.ReadLine());
+        int choice = CheckUserInputInt(Console.ReadLine());
         Console.Write("Please enter title: ");
         string title = Console.ReadLine();
         Console.Write("Please enter a price: ");
@@ -338,7 +346,6 @@ void UpdateAuthorsWithNewBooks()
 
 #region Deletes
 //färdig
-
 void DeleteAuthorWithBooks()
 {
     ListAllAuthors();
@@ -374,9 +381,7 @@ void DeleteAuthorWithBooks()
         }
     }
 }
-
 //färdig
-
 
 void DeleteBook()
 {
@@ -402,23 +407,8 @@ void DeleteBook()
         }
         else
         {
-            Console.WriteLine("Ýou entered a invalid isbn number");
+            Console.WriteLine("You entered a invalid isbn number");
         }
-    }
-}
-void RemoveAuthor()
-{
-    using (var db = new ShadyBookAppContext())
-    {
-        var result = new Author
-        {
-            Id = 2,
-        };
-
-        db.Entry(result).State = EntityState.Deleted;
-
-        db.SaveChanges();
-
     }
 }
 void DeleteFromStore()
@@ -459,7 +449,7 @@ void DeleteFromStore()
 
 
 #region QueriesForJoinTables
-void JoinAuthorAndBooks()
+void ShowAuthorWithBooks()
 {
     using (var context = new ShadyBookAppContext())
     {
@@ -484,7 +474,7 @@ void JoinAuthorAndBooks()
         Console.WriteLine();
     }
 }
-void JoinStoreAndBookAndStock()
+void ShowStoresWithBooksAndStocks()
 {
     using (var context = new ShadyBookAppContext())
     {
