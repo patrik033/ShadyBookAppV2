@@ -5,13 +5,14 @@ using ShadyBookAppV2.Models;
 
 //HuvudProgrammet, Starta men "StartUp" när alla paketen är installerade
 //Och databasen är skapad!
-string[] funcitons = new string[] {"ListAllGenres", "ListAllAuthors", "ListAllBooks", "ListAllStores",
-    "ShowAuthorWithBooks","ShowStoresWithBooksAndStocks",
-"-------------------------", "AddToStore", "AddAuthor", };
+//string[] funcitons = new string[] {"ListAllGenres", "ListAllAuthors", "ListAllBooks", "ListAllStores",
+//    "ShowAuthorWithBooks","ShowStoresWithBooksAndStocks",
+//"-------------------------", "AddToStore", "AddAuthor", };
 
-Console.WriteLine("[1]");
+//Console.WriteLine("[1]");
 
 //StartUp();
+UpdateAuthorsWithNewBooks();
 //DeleteFromStore();
 //AddToStore();
 //ShowAuthorWithBooks();
@@ -292,6 +293,7 @@ void UpdateAuthor()
         }
     }
 }
+//färdig
 void UpdateBook()
 {
     //bookId
@@ -301,34 +303,34 @@ void UpdateBook()
     ulong updatedBookId = CheckUserInputUlong(newBookId);
 
 
-    //date
-    Console.Write("Please enter a date to update, please use the format 'YYYY-MM-DD'.\nIf you don't enter it a default value will be entered: ");
-    string newDate = Console.ReadLine();
-    DateTime updatedDate = ConvertToDateTime(newDate);
-
-    //title
-    string newTitle = ReturnInput("Please enter a new title: ");
-
-    //authorId
-    string newAuthor = ReturnInput("Please enter a new authorId: ");
-    int newAuthorId = CheckUserInputInt(newAuthor);
-
-    //genreId
-    ListAllGenres();
-    string newGenre = ReturnInput("Please enter a new genreId:");
-    int newGenreId = CheckUserInputInt(newGenre);
-
-    //price
-    string newPrice = ReturnInput("Please enter a new price, please use commas for decimal numbers: ");
-    decimal newUpdatedPrice = CheckUserInputDecimal(newPrice);
-   
     using (var context = new ShadyBookAppContext())
     {
-
 
         var author = context.Books.Find(updatedBookId);
         if (author != null)
         {
+            //date
+            string newDate = ReturnInput("Please enter a date to update, please use the format 'YYYY-MM-DD'.\nIf you don't enter it a default value will be entered: ");
+            DateTime updatedDate = ConvertToDateTime(newDate);
+
+            //title
+            string newTitle = ReturnInput("Please enter a new title: ");
+
+            //authorId
+            ListAllAuthors();
+            string newAuthor = ReturnInput("Please enter a new authorId: ");
+            int newAuthorId = CheckUserInputInt(newAuthor);
+
+            //genreId
+            ListAllGenres();
+            string newGenre = ReturnInput("Please enter a new genreId:");
+            int newGenreId = CheckUserInputInt(newGenre);
+
+            //price
+            string newPrice = ReturnInput("Please enter a new price, please use commas for decimal numbers: ");
+            decimal newUpdatedPrice = CheckUserInputDecimal(newPrice);
+
+            //updaterar
             author.Title = newTitle;
             author.Price = newUpdatedPrice;
             author.ReleaseDate = updatedDate;
@@ -348,21 +350,23 @@ void UpdateAuthorsWithNewBooks()
     {
 
         ListAllAuthors();
-        Console.Write("Please enter an author to add a book to: ");
-        int choice = CheckUserInputInt(Console.ReadLine());
-        Console.Write("Please enter title: ");
-        string title = Console.ReadLine();
-        Console.Write("Please enter a price: ");
-        decimal price = decimal.Parse(Console.ReadLine());
-        ListAllGenres();
-        Console.Write("Please enter a genre: ");
-        int genreId = int.Parse(Console.ReadLine());
-
-
+        string stringChoice = ReturnInput("Please enter an author to add a book to: ");
+        int choice = CheckUserInputInt(stringChoice);
 
         var author = context.Authors.Find(choice);
         if (author != null)
         {
+
+            string title = ReturnInput("Please enter title: ");
+
+            string decimalAsString = ReturnInput("Please enter a price: ");
+            decimal price = CheckUserInputDecimal(decimalAsString);
+
+            ListAllGenres();
+            string genreAsString = ReturnInput("Please enter a genre: ");
+            int genreId = CheckUserInputInt(genreAsString);
+
+
             author.Books.Add(new Book() { Title = title, Price = price, GenreId = genreId, AuthorsId = choice });
             context.SaveChanges();
         }
