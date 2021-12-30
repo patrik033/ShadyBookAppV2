@@ -2,6 +2,7 @@
 using ShadyBookAppV2;
 using ShadyBookAppV2.Models;
 
+//DeleteFromStore();
 AddToStore();
 //JoinAuthorAndBooks();
 //ListAllBooks();
@@ -391,12 +392,18 @@ void DeleteBook()
         isCorrect = ulong.TryParse(isString, out isUlong);
     }
 
-    using (var db = new ShadyBookAppContext())
+    using (var context = new ShadyBookAppContext())
     {
-        var book = db.Books.Find(isUlong);
-
-        db.Entry(result).State = EntityState.Deleted;
-        db.SaveChanges();
+        var book = context.Books.Find(isUlong);
+        if (book != null)
+        {
+            context.Entry(book).State = EntityState.Deleted;
+            context.SaveChanges();
+        }
+        else
+        {
+            Console.WriteLine("Ýou entered a invalid isbn number");
+        }
     }
 }
 void RemoveAuthor()
@@ -427,29 +434,21 @@ void DeleteFromStore()
     Console.Write("What Store do you wish to remove from (Store ID)?: ");
     int storeId = CheckUserInputInt(Console.ReadLine());
 
-
-
-
-
-    
     using (var context = new ShadyBookAppContext())
     {
-        bool ifFindStore = context.Stores.Select(x => x.Id == storeId).FirstOrDefault();
-        bool ifFindBook = context.Books.Select(y => y.Id == id).FirstOrDefault();
-        if (ifFindStore == true && ifFindBook == true)
-        {
-            var s = context.Stocks.Where(x => x.StoreId == storeId && x.BookId == id).FirstOrDefault();
-            if (s != null)
-            {
 
-                context.Remove(s);
-                context.SaveChanges();
-            }
-            else
-            {
-                Console.WriteLine("The BookID och the StoreID or the combination does not exist or is already null");
-            }
+        var s = context.Stocks.Where(x => x.StoreId == storeId && x.BookId == id).FirstOrDefault();
+        if (s != null)
+        {
+
+            context.Remove(s);
+            context.SaveChanges();
         }
+        else
+        {
+            Console.WriteLine("The BookID och the StoreID or the combination does not exist or is already null");
+        }
+
     }
 
 
@@ -517,9 +516,9 @@ void StartUp()
     DataBaseFiles.AddStarterAuthorsAndBooks();
     DataBaseFiles.AddStarterStores();
     DataBaseFiles.AddStarterToStores();
-    
-        
-    
+
+
+
 }
 //Extra Funktioner
 ulong CheckUserInputUlong(string? input)
