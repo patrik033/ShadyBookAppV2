@@ -260,32 +260,27 @@ void AddAuthors(string firstName, string lastName, string date)
 #endregion
 
 #region Updates
+//färdig
+
 void UpdateAuthor()
 {
     ListAllAuthors();
     Console.Write("Please enter the author you want to update: ");
     string isString = Console.ReadLine();
-    bool isTrue = int.TryParse(isString, out int isInt);
-
-    while (isTrue != true)
-    {
-        Console.Write("Please enter a valid number: ");
-        isString = Console.ReadLine();
-        isTrue = int.TryParse(isString, out isInt);
-    }
+    int isInt = CheckUserInputInt(isString);
 
     using (var context = new ShadyBookAppContext())
     {
         var author = context.Authors.Find(isInt);
         if (author != null)
         {
+            //input 
             string firstName = ReturnInput("Enter First Name: ");
             string lastName = ReturnInput("Enter Last Name: ");
             Console.Write("Please enter a date to update, please use the format 'YYYY-MM-DD'.\nIf you don't enter it a default value will be entered: ");
             string newDate = Console.ReadLine();
             DateTime updatedDate = ConvertToDateTime(newDate);
-
-
+            //ändrar
             author.BirthDate = updatedDate;
             author.FirstName = firstName;
             author.LastName = lastName;
@@ -297,21 +292,54 @@ void UpdateAuthor()
         }
     }
 }
-void UpdateBook(ulong bookId, int authorsId, string title, decimal price, string newReleaseDate, int genreId)
+void UpdateBook()
 {
+    //bookId
+    ListAllBooks();
+    Console.Write("Please enter the book you want to update: ");
+    string newBookId = Console.ReadLine();
+    ulong updatedBookId = CheckUserInputUlong(newBookId);
+
+
+    //date
+    Console.Write("Please enter a date to update, please use the format 'YYYY-MM-DD'.\nIf you don't enter it a default value will be entered: ");
+    string newDate = Console.ReadLine();
+    DateTime updatedDate = ConvertToDateTime(newDate);
+
+    //title
+    string newTitle = ReturnInput("Please enter a new title: ");
+
+    //authorId
+    string newAuthor = ReturnInput("Please enter a new authorId: ");
+    int newAuthorId = CheckUserInputInt(newAuthor);
+
+    //genreId
+    ListAllGenres();
+    string newGenre = ReturnInput("Please enter a new genreId:");
+    int newGenreId = CheckUserInputInt(newGenre);
+
+    //price
+    string newPrice = ReturnInput("Please enter a new price, please use commas for decimal numbers: ");
+    decimal newUpdatedPrice = CheckUserInputDecimal(newPrice);
+   
     using (var context = new ShadyBookAppContext())
     {
-        DateTime newRelease = Convert.ToDateTime(newReleaseDate);
-        var au = context.Books.Where(x => x.Id == bookId).FirstOrDefault();
-        if (au != null)
+
+
+        var author = context.Books.Find(updatedBookId);
+        if (author != null)
         {
-            au.Title = title;
-            au.Price = price;
-            au.ReleaseDate = newRelease;
-            au.GenreId = genreId;
-            au.AuthorsId = authorsId;
+            author.Title = newTitle;
+            author.Price = newUpdatedPrice;
+            author.ReleaseDate = updatedDate;
+            author.GenreId = newGenreId;
+            author.AuthorsId = newAuthorId;
+            context.SaveChanges();
         }
-        context.SaveChanges();
+        else
+        {
+            Console.WriteLine("You made a misstake");
+        }
     }
 }
 void UpdateAuthorsWithNewBooks()
@@ -400,6 +428,8 @@ void DeleteBook()
     using (var context = new ShadyBookAppContext())
     {
         var book = context.Books.Find(isUlong);
+
+     
         if (book != null)
         {
             context.Entry(book).State = EntityState.Deleted;
@@ -409,24 +439,31 @@ void DeleteBook()
         {
             Console.WriteLine("You entered a invalid isbn number");
         }
+
     }
+
+
 }
 void DeleteFromStore()
 {
 
     ListAllBooks();
     Console.Write("Type a Book ID: ");
-    ulong id = CheckUserInputUlong(Console.ReadLine());
+    ulong id = ulong.Parse(Console.ReadLine());
 
     Console.WriteLine();
 
     ListAllStores();
     Console.Write("What Store do you wish to remove from (Store ID)?: ");
-    int storeId = CheckUserInputInt(Console.ReadLine());
+    int storeId = int.Parse(Console.ReadLine());
+
+
+
+
+
 
     using (var context = new ShadyBookAppContext())
     {
-
         var s = context.Stocks.Where(x => x.StoreId == storeId && x.BookId == id).FirstOrDefault();
         if (s != null)
         {
@@ -438,15 +475,11 @@ void DeleteFromStore()
         {
             Console.WriteLine("The BookID och the StoreID or the combination does not exist or is already null");
         }
-
     }
 
 
 }
 #endregion
-
-
-
 
 #region QueriesForJoinTables
 void ShowAuthorWithBooks()
@@ -474,7 +507,7 @@ void ShowAuthorWithBooks()
         Console.WriteLine();
     }
 }
-void ShowStoresWithBooksAndStocks()
+void ShowStoresWithBooksWithStocks()
 {
     using (var context = new ShadyBookAppContext())
     {
@@ -510,33 +543,7 @@ void StartUp()
 
 
 }
-//Extra Funktioner
-ulong CheckUserInputUlong(string? input)
-{
-    bool safe = ulong.TryParse(input, out ulong value);
-    while (safe == false)
 
-    {
-        Console.WriteLine("Please enter a correct ID: ");
-        input = Console.ReadLine();
-        safe = ulong.TryParse(input, out value);
-    }
-    return value;
-
-}
-int CheckUserInputInt(string? input)
-{
-    bool safe = int.TryParse(input, out int value);
-    while (safe == false)
-
-    {
-        Console.WriteLine("Please enter a correct number: ");
-        input = Console.ReadLine();
-        safe = int.TryParse(input, out value);
-    }
-    return value;
-
-}
 //Unödig?
 void JoinExistingBooksAndAuthors()
 {
@@ -551,8 +558,46 @@ void JoinExistingBooksAndAuthors()
     }
 }
 
+ulong CheckUserInputUlong(string input)
+{
+    bool safe = ulong.TryParse(input, out ulong value);
+    while (safe == false)
 
+    {
+        Console.WriteLine("Please enter a correct ID: ");
+        input = Console.ReadLine();
+        safe = ulong.TryParse(input, out value);
+    }
+    return value;
 
+}
+int CheckUserInputInt(string input)
+{
+    bool safe = int.TryParse(input, out int value);
+    while (safe == false)
+
+    {
+        Console.WriteLine("Please enter a correct ID: ");
+        input = Console.ReadLine();
+        safe = int.TryParse(input, out value);
+    }
+    return value;
+
+}
+
+decimal CheckUserInputDecimal(string input)
+{
+    bool safe = decimal.TryParse(input, out decimal value);
+    while (safe == false)
+
+    {
+        Console.WriteLine("Please enter a correct ID: ");
+        input = Console.ReadLine();
+        safe = decimal.TryParse(input, out value);
+    }
+    return value;
+
+}
 
 string ReturnInput(string message)
 {
