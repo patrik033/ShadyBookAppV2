@@ -3,7 +3,7 @@ using ShadyBookAppV2;
 using ShadyBookAppV2.Models;
 
 
-RemoveFromStore();
+DeleteAuthorWithBooks(1);
 Console.WriteLine("Du e klar");
 Console.ReadLine();
 
@@ -194,7 +194,32 @@ void AddToStore()
         }
     }
 }
+ulong CheckUserInputUlong(string input)
+{
+    bool safe = ulong.TryParse(input, out ulong value);
+    while (safe == false)
+   
+    {
+        Console.WriteLine("Please enter a correct ID: ");
+        input = Console.ReadLine(); 
+        safe = ulong.TryParse(input, out value);
+    }
+    return value;
+    
+}
+int CheckUserInputInt(string input)
+{
+    bool safe = int.TryParse(input, out int value);
+    while (safe == false)
 
+    {
+        Console.WriteLine("Please enter a correct ID: ");
+        input = Console.ReadLine();
+        safe = int.TryParse(input, out value);
+    }
+    return value;
+
+}
 void RemoveFromStore()
 {
 
@@ -344,15 +369,17 @@ void DeleteAuthorWithBooks(int id)
         {
             if (author != null)
             {
-                author.Books.Remove(book);
+               
+                context.Remove(author);
+                
             }
             else
             {
                 Console.WriteLine("Author not found");
             }
         }
-        context.Remove(author);
         context.SaveChanges();
+
     }
 }
 void RemoveBook(ulong id)
@@ -445,7 +472,7 @@ void StartUp()
     DataBaseFiles.AddStarterAuthorsAndBooks();
     DataBaseFiles.AddStarterStores();
     DataBaseFiles.AddStarterToStores();
-    string hello;
+    
         
     
 }
@@ -464,16 +491,7 @@ void JoinExistingBooksAndAuthors()
 }
 
 
-void StartUp()
-{
-    DataBaseFiles.AddStartupGenres();
-    DataBaseFiles.AddStarterAuthorsAndBooks();
-    DataBaseFiles.AddStarterStores();
-    DataBaseFiles.AddStarterToStores();
 
-
-
-}
 
 
 
