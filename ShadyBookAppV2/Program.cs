@@ -386,14 +386,15 @@ void RemoveAuthor()
 #endregion
 
 
+
 #region QueriesForJoinTables
 void JoinAuthorAndBooks()
 {
     using (var context = new ShadyBookAppContext())
     {
 
-        var data2 = from a in context.Set<Author>()
-                    join b in context.Set<Book>()
+        var data2 = from a in context.Authors
+                    join b in context.Books
                     on a.Id equals b.AuthorsId
                     group b by a.FirstName into a2
                     select new
@@ -437,7 +438,17 @@ void JoinStoreAndBookAndStock()
 #endregion
 
 
-
+//Ladda in dummy data till databasen
+void StartUp()
+{
+    DataBaseFiles.AddStartupGenres();
+    DataBaseFiles.AddStarterAuthorsAndBooks();
+    DataBaseFiles.AddStarterStores();
+    DataBaseFiles.AddStarterToStores();
+    string hello;
+        
+    
+}
 //Unödig?
 void JoinExistingBooksAndAuthors()
 {
