@@ -2,11 +2,11 @@
 using ShadyBookAppV2;
 using ShadyBookAppV2.Models;
 
-
+AddToStore();
 //JoinAuthorAndBooks();
 //ListAllBooks();
 //ListAllAuthors();
-DeleteAuthorWithBooks();
+//DeleteAuthorWithBooks();
 //RemoveBook();
 Console.WriteLine("Färdig");
 Console.ReadLine();
@@ -160,105 +160,51 @@ void AddStores()
 void AddToStore()
 {
     ListAllBooks();
-    Console.Write("Skriv in ett id: ");
-    ulong id = ulong.Parse(Console.ReadLine());
+    Console.Write("Type in a Book ID: ");
+    ulong id = CheckUserInputUlong(Console.ReadLine());
 
     Console.WriteLine();
 
     ListAllStores();
-    Console.Write("Vilken affär vill du fylla på?: ");
-    int storeId = int.Parse(Console.ReadLine());
+    Console.Write("What store do you wish to stock up?: ");
+    int storeId = CheckUserInputInt(Console.ReadLine());
 
     Console.WriteLine();
 
-    Console.WriteLine("Hur många böcker vill du lägga till: ");
-    int quantity = int.Parse(Console.ReadLine());
-
-
+    Console.WriteLine("How many book would you like to add: ");
+    int quantity = CheckUserInputInt(Console.ReadLine());
 
 
     using (var context = new ShadyBookAppContext())
     {
-        var s = context.Stocks.Where(x => x.StoreId == storeId && x.BookId == id).FirstOrDefault();
-        if (s == null)
+        bool ifFindStore = context.Stores.Select(x => x.Id == storeId).FirstOrDefault();
+        bool ifFindBook = context.Books.Select(y => y.Id == id).FirstOrDefault();
+        if (ifFindStore == true && ifFindBook == true)
         {
-            var st = new Stock
+            var s = context.Stocks.Where(x => x.StoreId == storeId && x.BookId == id).FirstOrDefault();
+            if (s == null)
             {
-                StoreId = storeId,
-                BookId = id,
-                StockItem = quantity
-            };
-            context.Add(st);
-            context.SaveChanges();
+                var st = new Stock
+                {
+                    StoreId = storeId,
+                    BookId = id,
+                    StockItem = quantity
+                };
+                context.Add(st);
+                context.SaveChanges();
+            }
+            else
+            {
+                s.StockItem += quantity;
+                context.SaveChanges();
+            }
         }
         else
-        {
-            s.StockItem += quantity;
-            context.SaveChanges();
-        }
+            Console.WriteLine("BookID or StoreID does not exist");
     }
 }
-ulong CheckUserInputUlong(string input)
-{
-    bool safe = ulong.TryParse(input, out ulong value);
-    while (safe == false)
-   
-    {
-        Console.WriteLine("Please enter a correct ID: ");
-        input = Console.ReadLine(); 
-        safe = ulong.TryParse(input, out value);
-    }
-    return value;
-    
-}
-int CheckUserInputInt(string input)
-{
-    bool safe = int.TryParse(input, out int value);
-    while (safe == false)
-
-    {
-        Console.WriteLine("Please enter a correct ID: ");
-        input = Console.ReadLine();
-        safe = int.TryParse(input, out value);
-    }
-    return value;
-
-}
-void RemoveFromStore()
-{
-
-    ListAllBooks();
-    Console.Write("Type a Book ID: ");
-    ulong id = ulong.Parse(Console.ReadLine());
-
-    Console.WriteLine();
-
-    ListAllStores();
-    Console.Write("What Store do you wish to remove from (Store ID)?: ");
-    int storeId = int.Parse(Console.ReadLine());
-
-    
 
 
-
-
-    using (var context = new ShadyBookAppContext())
-    {
-        var s = context.Stocks.Where(x => x.StoreId == storeId && x.BookId == id).FirstOrDefault();
-        if (s != null)
-        {
-            
-            context.Remove(s);
-            context.SaveChanges();
-        }
-        else
-        {
-            Console.WriteLine("The BookID och the StoreID or the combination does not exist or is already null");
-        }
-    }
-
-
-}
 
 #endregion
 
@@ -364,6 +310,7 @@ void UpdateAuthorsWithNewBooks()
 
 #region Deletes
 //färdig
+
 void DeleteAuthorWithBooks()
 {
     ListAllAuthors();
@@ -436,6 +383,46 @@ void RemoveAuthor()
 
     }
 }
+void DeleteFromStore()
+{
+
+    ListAllBooks();
+    Console.Write("Type a Book ID: ");
+    ulong id = CheckUserInputUlong(Console.ReadLine());
+
+    Console.WriteLine();
+
+    ListAllStores();
+    Console.Write("What Store do you wish to remove from (Store ID)?: ");
+    int storeId = CheckUserInputInt(Console.ReadLine());
+
+
+
+
+
+    
+    using (var context = new ShadyBookAppContext())
+    {
+        bool ifFindStore = context.Stores.Select(x => x.Id == storeId).FirstOrDefault();
+        bool ifFindBook = context.Books.Select(y => y.Id == id).FirstOrDefault();
+        if (ifFindStore == true && ifFindBook == true)
+        {
+            var s = context.Stocks.Where(x => x.StoreId == storeId && x.BookId == id).FirstOrDefault();
+            if (s != null)
+            {
+
+                context.Remove(s);
+                context.SaveChanges();
+            }
+            else
+            {
+                Console.WriteLine("The BookID och the StoreID or the combination does not exist or is already null");
+            }
+        }
+    }
+
+
+}
 #endregion
 
 
@@ -501,6 +488,33 @@ void StartUp()
     
         
     
+}
+//Extra Funktioner
+ulong CheckUserInputUlong(string? input)
+{
+    bool safe = ulong.TryParse(input, out ulong value);
+    while (safe == false)
+
+    {
+        Console.WriteLine("Please enter a correct ID: ");
+        input = Console.ReadLine();
+        safe = ulong.TryParse(input, out value);
+    }
+    return value;
+
+}
+int CheckUserInputInt(string? input)
+{
+    bool safe = int.TryParse(input, out int value);
+    while (safe == false)
+
+    {
+        Console.WriteLine("Please enter a correct number: ");
+        input = Console.ReadLine();
+        safe = int.TryParse(input, out value);
+    }
+    return value;
+
 }
 //Unödig?
 void JoinExistingBooksAndAuthors()
