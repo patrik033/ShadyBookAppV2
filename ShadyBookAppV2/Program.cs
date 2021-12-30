@@ -422,8 +422,8 @@ void DeleteBook()
     {
         var book = context.Books.Find(isUlong);
 
-        var s = context.Stocks.Where(x => x.StoreId == storeId && x.BookId == id).FirstOrDefault();
-        if (s != null)
+     
+        if (book != null)
         {
             context.Entry(book).State = EntityState.Deleted;
             context.SaveChanges();
@@ -536,33 +536,7 @@ void StartUp()
 
 
 }
-//Extra Funktioner
-ulong CheckUserInputUlong(string? input)
-{
-    bool safe = ulong.TryParse(input, out ulong value);
-    while (safe == false)
 
-    {
-        Console.WriteLine("Please enter a correct ID: ");
-        input = Console.ReadLine();
-        safe = ulong.TryParse(input, out value);
-    }
-    return value;
-
-}
-int CheckUserInputInt(string? input)
-{
-    bool safe = int.TryParse(input, out int value);
-    while (safe == false)
-
-    {
-        Console.WriteLine("Please enter a correct number: ");
-        input = Console.ReadLine();
-        safe = int.TryParse(input, out value);
-    }
-    return value;
-
-}
 //Unödig?
 void JoinExistingBooksAndAuthors()
 {
