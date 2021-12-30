@@ -5,17 +5,31 @@ using ShadyBookAppV2.Models;
 
 //HuvudProgrammet, Starta men "StartUp" när alla paketen är installerade
 //Och databasen är skapad!
-string[] funcitons = new string[] {"ListAllGenres", "ListAllAuthors", "ListAllBooks", "ListAllStores",
+string[] funcitons = new string[] {"Startup (Only run once!)","ListAllGenres", "ListAllAuthors", "ListAllBooks", "ListAllStores",
     "ShowAuthorWithBooks","ShowStoresWithBooksAndStocks",
-"-------------------------", "AddToStore", "AddAuthor", };
+"-------------------------", "AddToStore", "AddAuthor","AddBook", "-------------------------", 
+"Update Author", "Update Book","-------------------------", "Delete author with books", 
+    "Delete book", "Delete books from store" };
 
-Console.WriteLine("[1]");
+int x = 0;
+while (x != funcitons.Length +1 ) 
+{
+
+    for (int i = 0; i < funcitons.Length; i++)
+    {
+        Console.WriteLine($"[{i + 1}] {funcitons[i]}");
+    }
+    Console.WriteLine($"[{funcitons.Length + 1}] Exit");
+     x = int.Parse(Console.ReadLine());
+    Console.Clear();
+}
 
 //StartUp();
 //DeleteFromStore();
+//UpdateBook();
 //AddToStore();
 //ShowAuthorWithBooks();
-//ShowStoresWithBooksAndStocks();
+//ShowStoresWithBooksWithStocks();
 //ListAllBooks();
 //ListAllAuthors();
 //DeleteAuthorWithBooks();
