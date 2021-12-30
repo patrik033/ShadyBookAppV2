@@ -2,12 +2,12 @@
 using ShadyBookAppV2;
 using ShadyBookAppV2.Models;
 
-
+UpdateAuthor();
 //JoinAuthorAndBooks();
 //ListAllBooks();
 //ListAllAuthors();
-DeleteAuthorWithBooks();
-//RemoveBook();
+//DeleteAuthorWithBooks();
+//DeleteBook();
 Console.WriteLine("Färdig");
 Console.ReadLine();
 
@@ -212,7 +212,7 @@ void RemoveFromStore()
     Console.Write("What Store do you wish to remove from (Store ID)?: ");
     int storeId = int.Parse(Console.ReadLine());
 
-    
+
 
 
 
@@ -222,7 +222,7 @@ void RemoveFromStore()
         var s = context.Stocks.Where(x => x.StoreId == storeId && x.BookId == id).FirstOrDefault();
         if (s != null)
         {
-            
+
             context.Remove(s);
             context.SaveChanges();
         }
@@ -280,14 +280,41 @@ void AddAuthors(string firstName, string lastName, string date)
 #endregion
 
 #region Updates
-void UpdateAuthor(string date, int id)
+void UpdateAuthor()
 {
+    ListAllAuthors();
+    Console.Write("Please enter the author you want to update: ");
+    string isString = Console.ReadLine();
+    bool isTrue = int.TryParse(isString, out int isInt);
+
+    while (isTrue != true)
+    {
+        Console.Write("Please enter a valid number: ");
+        isString = Console.ReadLine();
+        isTrue = int.TryParse(isString, out isInt);
+    }
+
     using (var context = new ShadyBookAppContext())
     {
-        DateTime n = Convert.ToDateTime(date);
-        var au = context.Authors.Where(x => x.Id == id).FirstOrDefault();
-        au.BirthDate = n;
-        context.SaveChanges();
+        var author = context.Authors.Find(isInt);
+        if (author != null)
+        {
+            string firstName = ReturnInput("Enter First Name: ");
+            string lastName = ReturnInput("Enter Last Name: ");
+            Console.Write("Please enter a date to update, please use the format 'YYYY-MM-DD'.\nIf you don't enter it a default value will be entered: ");
+            string newDate = Console.ReadLine();
+            DateTime updatedDate = ConvertToDateTime(newDate);
+
+
+            author.BirthDate = updatedDate;
+            author.FirstName = firstName;
+            author.LastName = lastName;
+            context.SaveChanges();
+        }
+        else
+        {
+            Console.WriteLine("You entered an invalid author");
+        }
     }
 }
 void UpdateBook(ulong bookId, int authorsId, string title, decimal price, string newReleaseDate, int genreId)
@@ -345,7 +372,7 @@ void DeleteAuthorWithBooks()
     Console.Write("Choice which author you want to delete: ");
     string choiceAsString = Console.ReadLine();
     bool choice = int.TryParse(choiceAsString, out int choiceAsInt);
-    while(choice != true)
+    while (choice != true)
     {
         Console.WriteLine("Please enter a number: ");
         choiceAsString = Console.ReadLine();
@@ -354,31 +381,38 @@ void DeleteAuthorWithBooks()
 
     using (var context = new ShadyBookAppContext())
     {
-        var author = context.Authors.Single(a => a.Id == choiceAsInt);
-        var books = context.Books.Where(b => b.AuthorsId == choiceAsInt);
-        foreach (var book in books)
+        var author = context.Authors.Find(choiceAsInt);
+        if (author != null)
         {
-            if (author != null)
+            var books = context.Books.Where(b => b.AuthorsId == choiceAsInt);
+            foreach (var book in books)
             {
-                context.Entry(book).State = EntityState.Deleted;
+                if (author != null)
+                {
+                    context.Entry(book).State = EntityState.Deleted;
+                }
             }
-            else
-            {
-                Console.WriteLine("Author not found");
-            }
+            context.Remove(author);
+            context.SaveChanges();
         }
-        context.Remove(author);
-        context.SaveChanges();
+        else
+        {
+            Console.WriteLine("Author not found");
+        }
     }
 }
-void RemoveBook()
+
+//färdig
+
+
+void DeleteBook()
 {
     ListAllBooks();
     Console.Write("Enter which number you want to delete: ");
     string isString = Console.ReadLine();
     bool isCorrect = ulong.TryParse(isString, out ulong isUlong);
 
-    while(isCorrect != true)
+    while (isCorrect != true)
     {
         Console.WriteLine("Enter a correct number: ");
         isString = Console.ReadLine();
@@ -387,31 +421,21 @@ void RemoveBook()
 
     using (var db = new ShadyBookAppContext())
     {
-        var result = new Book
+        var book = db.Books.Find(isUlong);
+
+        if (book != null)
         {
-            Id = isUlong,
-        };
-
-        db.Entry(result).State = EntityState.Deleted;
-        db.SaveChanges();
-    }
-}
-void RemoveAuthor()
-{
-    using (var db = new ShadyBookAppContext())
-    {
-        var result = new Author
+            db.Entry(book).State = EntityState.Deleted;
+            db.SaveChanges();
+        }
+        else
         {
-            Id = 2,
-        };
-
-        db.Entry(result).State = EntityState.Deleted;
-
-        db.SaveChanges();
-
+            Console.WriteLine("You enter a invalid isbn number");
+        }
     }
 }
 #endregion
+
 
 
 
@@ -489,9 +513,13 @@ void StartUp()
     DataBaseFiles.AddStarterAuthorsAndBooks();
     DataBaseFiles.AddStarterStores();
     DataBaseFiles.AddStarterToStores();
+}
 
-
-
+string ReturnInput(string message)
+{
+    Console.Write($"{message}: ");
+    string output = Console.ReadLine();
+    return output;
 }
 
 
