@@ -198,7 +198,32 @@ void AddToStore()
         }
     }
 }
+ulong CheckUserInputUlong(string input)
+{
+    bool safe = ulong.TryParse(input, out ulong value);
+    while (safe == false)
+   
+    {
+        Console.WriteLine("Please enter a correct ID: ");
+        input = Console.ReadLine(); 
+        safe = ulong.TryParse(input, out value);
+    }
+    return value;
+    
+}
+int CheckUserInputInt(string input)
+{
+    bool safe = int.TryParse(input, out int value);
+    while (safe == false)
 
+    {
+        Console.WriteLine("Please enter a correct ID: ");
+        input = Console.ReadLine();
+        safe = int.TryParse(input, out value);
+    }
+    return value;
+
+}
 void RemoveFromStore()
 {
 
@@ -491,7 +516,16 @@ void JoinStoreAndBookAndStock()
 
 
 //Ladda in dummy data till databasen
-
+void StartUp()
+{
+    DataBaseFiles.AddStartupGenres();
+    DataBaseFiles.AddStarterAuthorsAndBooks();
+    DataBaseFiles.AddStarterStores();
+    DataBaseFiles.AddStarterToStores();
+    
+        
+    
+}
 //Unödig?
 void JoinExistingBooksAndAuthors()
 {
@@ -507,13 +541,7 @@ void JoinExistingBooksAndAuthors()
 }
 
 
-void StartUp()
-{
-    DataBaseFiles.AddStartupGenres();
-    DataBaseFiles.AddStarterAuthorsAndBooks();
-    DataBaseFiles.AddStarterStores();
-    DataBaseFiles.AddStarterToStores();
-}
+
 
 string ReturnInput(string message)
 {
