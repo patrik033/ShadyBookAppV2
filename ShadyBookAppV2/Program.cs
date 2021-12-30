@@ -3,10 +3,12 @@ using ShadyBookAppV2;
 using ShadyBookAppV2.Models;
 
 
-JoinStoreAndBookAndStock();
 //JoinAuthorAndBooks();
-
-JoinStoreAndBookAndStock();
+//ListAllBooks();
+//ListAllAuthors();
+DeleteAuthorWithBooks();
+//RemoveBook();
+Console.WriteLine("Färdig");
 Console.ReadLine();
 
 
@@ -299,17 +301,29 @@ void UpdateAuthorsWithNewBooks()
 #endregion
 
 #region Deletes
-void DeleteAuthorWithBooks(int id)
+//färdig
+void DeleteAuthorWithBooks()
 {
+    ListAllAuthors();
+    Console.Write("Choice which author you want to delete: ");
+    string choiceAsString = Console.ReadLine();
+    bool choice = int.TryParse(choiceAsString, out int choiceAsInt);
+    while(choice != true)
+    {
+        Console.WriteLine("Please enter a number: ");
+        choiceAsString = Console.ReadLine();
+        choice = int.TryParse(choiceAsString, out choiceAsInt);
+    }
+
     using (var context = new ShadyBookAppContext())
     {
-        var author = context.Authors.Single(a => a.Id == id);
-        var books = context.Books.Where(b => b.AuthorsId == id);
+        var author = context.Authors.Single(a => a.Id == choiceAsInt);
+        var books = context.Books.Where(b => b.AuthorsId == choiceAsInt);
         foreach (var book in books)
         {
             if (author != null)
             {
-                author.Books.Remove(book);
+                context.Entry(book).State = EntityState.Deleted;
             }
             else
             {
@@ -320,13 +334,25 @@ void DeleteAuthorWithBooks(int id)
         context.SaveChanges();
     }
 }
-void RemoveBook(ulong id)
+void RemoveBook()
 {
+    ListAllBooks();
+    Console.Write("Enter which number you want to delete: ");
+    string isString = Console.ReadLine();
+    bool isCorrect = ulong.TryParse(isString, out ulong isUlong);
+
+    while(isCorrect != true)
+    {
+        Console.WriteLine("Enter a correct number: ");
+        isString = Console.ReadLine();
+        isCorrect = ulong.TryParse(isString, out isUlong);
+    }
+
     using (var db = new ShadyBookAppContext())
     {
         var result = new Book
         {
-            Id = id,
+            Id = isUlong,
         };
 
         db.Entry(result).State = EntityState.Deleted;
@@ -404,16 +430,7 @@ void JoinStoreAndBookAndStock()
 
 
 //Ladda in dummy data till databasen
-void StartUp()
-{
-    DataBaseFiles.AddStartupGenres();
-    DataBaseFiles.AddStarterAuthorsAndBooks();
-    DataBaseFiles.AddStarterStores();
-    DataBaseFiles.AddStarterToStores();
-    string hello;
-        
-    
-}
+
 //Unödig?
 void JoinExistingBooksAndAuthors()
 {
