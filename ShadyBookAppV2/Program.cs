@@ -12,7 +12,7 @@ string[] funcitons = new string[] {"Startup (Only run once!)","ListAllGenres", "
     "Delete book", "Delete books from store" };
 
 int x = 0;
-while (x != funcitons.Length)
+while (x != funcitons.Length +1)
 {
     Console.Clear();
     for (int i = 0; i < funcitons.Length; i++)
@@ -20,13 +20,32 @@ while (x != funcitons.Length)
         Console.WriteLine($"[{i + 1}] {funcitons[i]}");
     }
     Console.WriteLine($"[{funcitons.Length + 1}] Exit");
-    x = int.Parse(Console.ReadLine());
+    x = CheckUserInputInt(Console.ReadLine());
     Console.Clear();
     switch (x)
     {
         case 1:
             {
-                StartUp();
+                try
+                {
+                    using (var context = new ShadyBookAppContext())
+                    {
+                        bool test = context.Books.Any();
+
+                        if (test != true)
+                        {
+                            StartUp();
+                        }
+                        else
+                            Console.WriteLine("Already Used");
+                    }
+                    
+                }
+                catch
+                {
+                    Console.Clear();
+                    Console.WriteLine("Already Used");
+                }
                 Console.ReadLine();
                 break;
             }
@@ -69,54 +88,55 @@ while (x != funcitons.Length)
         case 9:
             {
                 AddToStore();
-                Console.ReadLine();
+               
                 break;
             }
         case 10:
             {
                 AddAuthorsUi();
-                Console.ReadLine();
+                
                 break;
             }
         case 11:
             {
                 UpdateAuthorsWithNewBooks();
-                Console.ReadLine();
+                
                 break;
             }
         case 13:
             {
                 UpdateAuthor();
-                Console.ReadLine();
+                
                 break;
             }
         case 14:
             {
                 UpdateBook();
-                Console.ReadLine();
+                
                 break;
             }
         case 16:
             {
                 DeleteAuthorWithBooks();
-                Console.ReadLine();
+                
                 break;
             }
         case 17:
             {
                 DeleteBook();
-                Console.ReadLine();
+                
                 break;
 
             }
         case 18:
             {
                 DeleteFromStore();
-                Console.ReadLine();
+                
                 break;
             }
         default:
             {
+
                 break;
             }
     }
@@ -125,7 +145,7 @@ while (x != funcitons.Length)
 
 
 //StartUp();
-UpdateAuthorsWithNewBooks();
+//UpdateAuthorsWithNewBooks();
 //DeleteFromStore();
 //UpdateBook();
 //AddToStore();
@@ -308,9 +328,9 @@ void AddToStore()
                   where Store.Id == storeId
                   select Store;
 
-        bool ifFindStore = context.Stores.Select(x => x.Id == storeId).FirstOrDefault();
-        bool ifFindBook = context.Books.Select(y => y.Id == id).FirstOrDefault();
-        if (ifFindStore == true && ifFindBook == true)
+        bool ifFindStore = context.Stores.Any(x => x.Id == storeId);
+        bool ifFindBook = context.Books.Any(x => x.Id == id);
+        if (ifFindBook == true && ifFindStore == true)
         {
             var s = context.Stocks.Where(x => x.StoreId == storeId && x.BookId == id).FirstOrDefault();
             if (s == null)
@@ -331,7 +351,12 @@ void AddToStore()
             }
         }
         else
-            Console.WriteLine("BookID or StoreID does not exist");
+        {
+            Console.WriteLine("The book or the store does not exist");
+            Console.ReadLine();
+
+        }
+
     }
 }
 #endregion
@@ -408,6 +433,8 @@ void UpdateAuthor()
         else
         {
             Console.WriteLine("You entered an invalid author");
+            Console.ReadLine();
+
         }
     }
 }
@@ -459,6 +486,8 @@ void UpdateBook()
         else
         {
             Console.WriteLine("You made a misstake");
+            Console.ReadLine();
+
         }
     }
 }
@@ -489,7 +518,11 @@ void UpdateAuthorsWithNewBooks()
             context.SaveChanges();
         }
         else
+        {
             Console.WriteLine("Det finns ingen författare med det id:t");
+            Console.ReadLine();
+
+        }
     }
 }
 #endregion
@@ -528,6 +561,8 @@ void DeleteAuthorWithBooks()
         else
         {
             Console.WriteLine("Author not found");
+            Console.ReadLine();
+
         }
     }
 }
@@ -560,6 +595,7 @@ void DeleteBook()
         else
         {
             Console.WriteLine("You entered a invalid isbn number");
+            Console.ReadLine();
         }
 
     }
@@ -571,17 +607,13 @@ void DeleteFromStore()
 
     ListAllBooks();
     Console.Write("Type a Book ID: ");
-    ulong id = ulong.Parse(Console.ReadLine());
+    ulong id = CheckUserInputUlong(Console.ReadLine());
 
     Console.WriteLine();
 
     ListAllStores();
     Console.Write("What Store do you wish to remove from (Store ID)?: ");
-    int storeId = int.Parse(Console.ReadLine());
-
-
-
-
+    int storeId = CheckUserInputInt(Console.ReadLine());
 
 
     using (var context = new ShadyBookAppContext())
@@ -592,10 +624,13 @@ void DeleteFromStore()
 
             context.Remove(s);
             context.SaveChanges();
+            Console.WriteLine("Alla böckerna borttagna!");
+            Console.ReadLine();
         }
         else
         {
             Console.WriteLine("The BookID och the StoreID or the combination does not exist or is already null");
+            Console.ReadLine();
         }
     }
 
@@ -686,7 +721,7 @@ ulong CheckUserInputUlong(string input)
     while (safe == false)
 
     {
-        Console.WriteLine("Please enter a correct ID: ");
+        Console.WriteLine("Please enter a correct NUMBER: ");
         input = Console.ReadLine();
         safe = ulong.TryParse(input, out value);
     }
@@ -699,7 +734,7 @@ int CheckUserInputInt(string input)
     while (safe == false)
 
     {
-        Console.WriteLine("Please enter a correct ID: ");
+        Console.WriteLine("Please enter a correct NUMBER: ");
         input = Console.ReadLine();
         safe = int.TryParse(input, out value);
     }
@@ -713,7 +748,7 @@ decimal CheckUserInputDecimal(string input)
     while (safe == false)
 
     {
-        Console.WriteLine("Please enter a correct ID: ");
+        Console.WriteLine("Please enter a correct NUMBER: ");
         input = Console.ReadLine();
         safe = decimal.TryParse(input, out value);
     }
