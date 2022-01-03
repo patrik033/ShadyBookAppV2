@@ -565,9 +565,7 @@ namespace ShadyBookAppV2
             DataBaseFiles.AddStarterAuthorsAndBooks();
             DataBaseFiles.AddStarterStores();
             DataBaseFiles.AddStarterToStores();
-
-
-
+            Console.WriteLine("Done!");
         }
 
 
