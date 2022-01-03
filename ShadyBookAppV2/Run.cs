@@ -322,11 +322,26 @@ namespace ShadyBookAppV2
                     ListAllAuthors();
                     string newAuthor = ReturnInput("Please enter a new authorId: ");
                     int newAuthorId = CheckUserInputInt(newAuthor);
+                    var testAuthor = context.Authors.Find(newAuthorId);
+                    if (testAuthor == null)
+                    {
+                        Console.WriteLine("You entered an invalid author");
+                        Console.ReadLine();
+                        return;
+                    }
 
                     //genreId
                     ListAllGenres();
                     string newGenre = ReturnInput("Please enter a new genreId:");
                     int newGenreId = CheckUserInputInt(newGenre);
+                    var testGenre = context.Genres.Find(newGenreId);
+
+                    if(testGenre == null)
+                    {
+                        Console.WriteLine("You entered an invalid genre");
+                        Console.ReadLine();
+                        return;
+                    }
 
                     //price
                     string newPrice = ReturnInput("Please enter a new price, please use commas for decimal numbers: ");
@@ -339,12 +354,6 @@ namespace ShadyBookAppV2
                     author.GenreId = newGenreId;
                     author.AuthorsId = newAuthorId;
                     context.SaveChanges();
-                }
-                else
-                {
-                    Console.WriteLine("You made a misstake");
-                    Console.ReadLine();
-
                 }
             }
         }
@@ -369,10 +378,18 @@ namespace ShadyBookAppV2
                     ListAllGenres();
                     string genreAsString = ReturnInput("Please enter a genre: ");
                     int genreId = CheckUserInputInt(genreAsString);
+                    var genre = context.Genres.Find(genreId);
+                    if (genre != null)
+                    {
+                        author.Books.Add(new Book() { Title = title, Price = price, GenreId = genreId, AuthorsId = choice });
+                        context.SaveChanges();
 
+                    }
+                    else
+                    {
+                        Console.WriteLine("You entered an author that doesn't exist");
+                    }
 
-                    author.Books.Add(new Book() { Title = title, Price = price, GenreId = genreId, AuthorsId = choice });
-                    context.SaveChanges();
                 }
                 else
                 {
@@ -500,7 +517,7 @@ namespace ShadyBookAppV2
                     Console.WriteLine("Alla böckerna borttagna!");
                     Console.ReadLine();
                 }
-                
+
             }
 
 
@@ -709,50 +726,50 @@ namespace ShadyBookAppV2
                     case 9:
                         {
                             AddToStore();
-
+                            Console.WriteLine("Done");
                             break;
                         }
                     case 10:
                         {
                             AddAuthorsUi();
-
+                            Console.WriteLine("Done");
                             break;
                         }
                     case 11:
                         {
                             UpdateAuthorsWithNewBooks();
-
+                            Console.WriteLine("Done");
                             break;
                         }
                     case 13:
                         {
                             UpdateAuthor();
-
+                            Console.WriteLine("Done");
                             break;
                         }
                     case 14:
                         {
                             UpdateBook();
-
+                            Console.WriteLine("Done");
                             break;
                         }
                     case 16:
                         {
                             DeleteAuthorWithBooks();
-
+                            Console.WriteLine("Done");
                             break;
                         }
                     case 17:
                         {
                             DeleteBook();
-
+                            Console.WriteLine("Done");
                             break;
 
                         }
                     case 18:
                         {
                             DeleteFromStore();
-
+                            Console.WriteLine("Done");
                             break;
                         }
                     default:
