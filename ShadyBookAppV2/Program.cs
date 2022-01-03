@@ -12,9 +12,9 @@ using ShadyBookAppV2.Models;
 //Console.WriteLine("[1]");
 
 //StartUp();
-UpdateAuthorsWithNewBooks();
+//UpdateAuthorsWithNewBooks();
 //DeleteFromStore();
-//AddToStore();
+AddToStore();
 //ShowAuthorWithBooks();
 //ShowStoresWithBooksAndStocks();
 //ListAllBooks();
@@ -190,9 +190,10 @@ void AddToStore()
 
     using (var context = new ShadyBookAppContext())
     {
-        bool ifFindStore = context.Stores.Select(x => x.Id == storeId).FirstOrDefault();
-        bool ifFindBook = context.Books.Select(y => y.Id == id).FirstOrDefault();
-        if (ifFindStore == true && ifFindBook == true)
+  
+        var ifFindStore = context.Stores.Find(storeId);
+        var ifFindBook = context.Books.Find(id);
+        if (ifFindStore != null && ifFindBook != null)
         {
             var s = context.Stocks.Where(x => x.StoreId == storeId && x.BookId == id).FirstOrDefault();
             if (s == null)
