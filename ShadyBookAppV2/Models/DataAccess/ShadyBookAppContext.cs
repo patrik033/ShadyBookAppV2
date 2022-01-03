@@ -20,6 +20,7 @@ namespace ShadyBookAppV2
             
             optionsBuilder
                 .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
+                .EnableSensitiveDataLogging()
                 .UseSqlServer(config["ConnectionStrings:DefaultConnection"]);
         }
 
