@@ -19,15 +19,15 @@ namespace ShadyBookAppV2
             var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             
             optionsBuilder
-                .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
-                .EnableSensitiveDataLogging()
+                //.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
+                //.EnableSensitiveDataLogging()
                 .UseSqlServer(config["ConnectionStrings:DefaultConnection"]);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Stock>()
-                .HasKey(t => new {t.StoreId,t.BookId});
+                .HasKey(t => new { t.StoreId, t.BookId });
 
             modelBuilder.Entity<Stock>()
                 .HasOne(b => b.Book)
@@ -38,7 +38,6 @@ namespace ShadyBookAppV2
                 .HasOne(store => store.Store)
                 .WithMany(st => st.Stocks)
                 .HasForeignKey(store => store.StoreId);
-
         }
     }
 }
