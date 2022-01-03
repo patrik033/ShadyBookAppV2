@@ -9,7 +9,7 @@ Se till att du är kopplad till “(localdb)\MSSQLLocalDB” som server
 
 Kontrollera att Connectionsträngen (i appsettings  
 
-Server=(localdb)\\MSSQLLocalDB;Database=ShadyBookApp;Trusted_Connection=True;) 
+Server=(localdb)\\\MSSQLLocalDB;Database=ShadyBookApp;Trusted_Connection=True;) 
 
 Du borde få med alla nuggetpaketen som ska behövas men ifall det inte så skulle vara fallet så skriver jag en lista på dem du behöver 
 
