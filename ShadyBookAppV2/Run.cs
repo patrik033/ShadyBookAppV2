@@ -64,9 +64,6 @@ namespace ShadyBookAppV2
         
         void AddToStore()
         {
-
-
-
             using (var context = new ShadyBookAppContext())
             {
 
@@ -101,8 +98,8 @@ namespace ShadyBookAppV2
 
 
 
-                var s = context.Stocks.Where(x => x.StoreId == storeId && x.BookId == id).FirstOrDefault();
-                if (s == null)
+                var track = context.Stocks.Where(x => x.StoreId == storeId && x.BookId == id).FirstOrDefault();
+                if (track == null)
                 {
                     var st = new Stock
                     {
@@ -115,12 +112,55 @@ namespace ShadyBookAppV2
                 }
                 else
                 {
-                    s.StockItem += quantity;
+                    track.StockItem += quantity;
                     context.SaveChanges();
                 }
 
 
 
+            }
+        }
+        void AddBook()
+        {
+            using (var context = new ShadyBookAppContext())
+            {
+
+                ListAllAuthors();
+                string stringChoice = ReturnInput("Please enter an author to add a book to: ");
+                int choice = CheckUserInputInt(stringChoice);
+
+                var author = context.Authors.Find(choice);
+                if (author != null)
+                {
+
+                    string title = ReturnInput("Please enter title: ");
+
+                    string decimalAsString = ReturnInput("Please enter a price: ");
+                    decimal price = CheckUserInputDecimal(decimalAsString);
+
+                    ListAllGenres();
+                    string genreAsString = ReturnInput("Please enter a genre: ");
+                    int genreId = CheckUserInputInt(genreAsString);
+                    var genre = context.Genres.Find(genreId);
+                    if (genre != null)
+                    {
+                        author.Books.Add(new Book() { Title = title, Price = price, GenreId = genreId, AuthorsId = choice });
+                        context.SaveChanges();
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("You entered an author that doesn't exist");
+                        Console.ReadLine();
+                    }
+
+                }
+                else
+                {
+                    Console.WriteLine("Det finns ingen författare med det id:t");
+                    Console.ReadLine();
+
+                }
             }
         }
         #endregion
@@ -264,49 +304,6 @@ namespace ShadyBookAppV2
                 }
             }
         }
-        void UpdateAuthorsWithNewBooks()
-        {
-            using (var context = new ShadyBookAppContext())
-            {
-
-                ListAllAuthors();
-                string stringChoice = ReturnInput("Please enter an author to add a book to: ");
-                int choice = CheckUserInputInt(stringChoice);
-
-                var author = context.Authors.Find(choice);
-                if (author != null)
-                {
-
-                    string title = ReturnInput("Please enter title: ");
-
-                    string decimalAsString = ReturnInput("Please enter a price: ");
-                    decimal price = CheckUserInputDecimal(decimalAsString);
-
-                    ListAllGenres();
-                    string genreAsString = ReturnInput("Please enter a genre: ");
-                    int genreId = CheckUserInputInt(genreAsString);
-                    var genre = context.Genres.Find(genreId);
-                    if (genre != null)
-                    {
-                        author.Books.Add(new Book() { Title = title, Price = price, GenreId = genreId, AuthorsId = choice });
-                        context.SaveChanges();
-
-                    }
-                    else
-                    {
-                        Console.WriteLine("You entered an author that doesn't exist");
-                        Console.ReadLine();
-                    }
-
-                }
-                else
-                {
-                    Console.WriteLine("Det finns ingen författare med det id:t");
-                    Console.ReadLine();
-
-                }
-            }
-        }
         #endregion
 
         #region Deletes
@@ -314,13 +311,15 @@ namespace ShadyBookAppV2
         void DeleteAuthorWithBooks()
         {
             ListAllAuthors();
-            Console.Write("Choice which author you want to delete: ");
-            string choiceAsString = Console.ReadLine();
+
+
+         
+            string choiceAsString = ReturnInput("Choice which author you want to delete: ");
             bool choice = int.TryParse(choiceAsString, out int choiceAsInt);
+
             while (choice != true)
             {
-                Console.WriteLine("Please enter a number: ");
-                choiceAsString = Console.ReadLine();
+                choiceAsString = ReturnInput("Please enter a number: ");
                 choice = int.TryParse(choiceAsString, out choiceAsInt);
             }
 
@@ -419,16 +418,12 @@ namespace ShadyBookAppV2
                 var track = context.Stocks.Where(x => x.StoreId == storeId && x.BookId == id).FirstOrDefault();
                 if (track != null)
                 {
-
                     context.Remove(track);
                     context.SaveChanges();
                     Console.WriteLine("Alla böckerna borttagna!");
                     Console.ReadLine();
                 }
-
             }
-
-
         }
         #endregion
 
@@ -519,7 +514,6 @@ namespace ShadyBookAppV2
                 safe = int.TryParse(input, out value);
             }
             return value;
-
         }
 
         decimal CheckUserInputDecimal(string input)
@@ -533,7 +527,6 @@ namespace ShadyBookAppV2
                 safe = decimal.TryParse(input, out value);
             }
             return value;
-
         }
 
         string ReturnInput(string message)
@@ -645,7 +638,7 @@ namespace ShadyBookAppV2
                         }
                     case 11:
                         {
-                            UpdateAuthorsWithNewBooks();
+                            AddBook();
                             Console.WriteLine("Done");
                             break;
                         }
@@ -682,7 +675,7 @@ namespace ShadyBookAppV2
                         }
                     default:
                         {
-
+                            Console.WriteLine("You entered an invalid option");
                             break;
                         }
                 }
