@@ -61,100 +61,7 @@ namespace ShadyBookAppV2
         #endregion
 
         #region Add
-        void AddGenres()
-        {
-            using (var context = new ShadyBookAppContext())
-            {
-                //var genres = context.Genres;
-                var genre = new List<Genre>()
-    {
-        new Genre()
-        {
-            GenreName = "Skräck"
-        },
-        new Genre()
-        {
-            GenreName = "Fantasy"
-        },
-        new Genre()
-        {
-            GenreName = "Sci-fi"
-        }
-    };
-                context.Genres.AddRange(genre);
-                context.SaveChanges();
-            }
-        }
-        void AddBook()
-        {
-            using (var context = new ShadyBookAppContext())
-            {
-                var book = new Book()
-                {
-                    AuthorsId = 1,
-                    Title = "Spaghetti Vol 1",
-                    Price = 12.45M,
-                    ReleaseDate = DateTime.Now,
-                    GenreId = 2
-                };
-                context.Books.Add(book);
-                context.SaveChanges();
-            }
-        }
-        void AddAll()
-        {
-            using (var context = new ShadyBookAppContext())
-            {
-                Author a1 = new Author()
-                {
-                    FirstName = "Test1",
-                    LastName = "Test2",
-
-                };
-                Book b1 = new Book()
-                {
-                    Title = "some",
-                    Price = 12.34M,
-                    GenreId = 1
-                };
-                Book b2 = new Book()
-                {
-                    Title = "some2",
-                    Price = 42.34M,
-                    GenreId = 2
-                };
-
-                a1.Books = new List<Book> { b1, b2 };
-                context.Add(a1);
-                context.SaveChanges();
-            }
-        }
-        void AddStores()
-        {
-            using (var context = new ShadyBookAppContext())
-            {
-                var stores = new List<Store>()
-        {
-            new Store()
-            {
-                StoreName = "Classes Bibliotek",
-                Address = "Stora vägen 123"
-            },
-            new Store()
-            {
-                StoreName = "Amazon",
-                Address = "Lilla vägen 123"
-            },
-            new Store()
-            {
-                StoreName = "Ebay",
-                Address = "Mellan vägen 321"
-            }
-        };
-                context.Stores.AddRange(stores);
-                context.SaveChanges();
-            }
-        }
+        
         void AddToStore()
         {
 
@@ -388,6 +295,7 @@ namespace ShadyBookAppV2
                     else
                     {
                         Console.WriteLine("You entered an author that doesn't exist");
+                        Console.ReadLine();
                     }
 
                 }
