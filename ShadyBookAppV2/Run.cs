@@ -669,36 +669,42 @@ namespace ShadyBookAppV2
                     case 2:
                         {
                             ListAllGenres();
+                            Console.WriteLine("Done");
                             Console.ReadLine();
                             break;
                         }
                     case 3:
                         {
                             ListAllAuthors();
+                            Console.WriteLine("Done");
                             Console.ReadLine();
                             break;
                         }
                     case 4:
                         {
                             ListAllBooks();
+                            Console.WriteLine("Done");
                             Console.ReadLine();
                             break;
                         }
                     case 5:
                         {
                             ListAllStores();
+                            Console.WriteLine("Done");
                             Console.ReadLine();
                             break;
                         }
                     case 6:
                         {
                             ShowAuthorWithBooks();
+                            Console.WriteLine("Done");
                             Console.ReadLine();
                             break;
                         }
                     case 7:
                         {
                             ShowStoresWithBooksWithStocks();
+                            Console.WriteLine("Done");
                             Console.ReadLine();
                             break;
                         }
