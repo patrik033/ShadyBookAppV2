@@ -488,8 +488,6 @@ namespace ShadyBookAppV2
             Console.WriteLine("Done!");
         }
 
-
-
         ulong CheckUserInputUlong(string input)
         {
             bool safe = ulong.TryParse(input, out ulong value);
@@ -507,7 +505,6 @@ namespace ShadyBookAppV2
         {
             bool safe = int.TryParse(input, out int value);
             while (safe == false)
-
             {
                 Console.WriteLine("Please enter a correct NUMBER: ");
                 input = Console.ReadLine();
@@ -520,7 +517,7 @@ namespace ShadyBookAppV2
         {
             bool safe = decimal.TryParse(input, out decimal value);
             while (safe == false)
-
+            
             {
                 Console.WriteLine("Please enter a correct NUMBER: ");
                 input = Console.ReadLine();
@@ -673,9 +670,16 @@ namespace ShadyBookAppV2
                             Console.WriteLine("Done");
                             break;
                         }
+                    case 19:
+                        {
+                            Console.WriteLine("Done");
+                            Console.ReadLine();
+                            break;
+                        }
                     default:
                         {
                             Console.WriteLine("You entered an invalid option");
+                            Console.ReadLine();
                             break;
                         }
                 }

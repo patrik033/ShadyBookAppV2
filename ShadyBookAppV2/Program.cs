@@ -9,8 +9,7 @@ Run run = new Run();
 run.Menu();
 
 
-
-Console.WriteLine("Done");
+Console.WriteLine("Press any key to exit");
 Console.ReadLine();
 
 
