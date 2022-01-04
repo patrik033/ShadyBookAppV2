@@ -256,8 +256,8 @@ namespace ShadyBookAppV2
             using (var context = new ShadyBookAppContext())
             {
 
-                var book = context.Books.Find(updatedBookId);
-                if (book != null)
+                var author = context.Books.Find(updatedBookId);
+                if (author != null)
                 {
                     //date
                     string newDate = ReturnInput("Please enter a date to update, please use the format 'YYYY-MM-DD'.\nIf you don't enter it a default value will be entered: ");
@@ -296,11 +296,11 @@ namespace ShadyBookAppV2
                     decimal newUpdatedPrice = CheckUserInputDecimal(newPrice);
 
                     //updaterar
-                    book.Title = newTitle;
-                    book.Price = newUpdatedPrice;
-                    book.ReleaseDate = updatedDate;
-                    book.GenreId = newGenreId;
-                    book.AuthorsId = newAuthorId;
+                    author.Title = newTitle;
+                    author.Price = newUpdatedPrice;
+                    author.ReleaseDate = updatedDate;
+                    author.GenreId = newGenreId;
+                    author.AuthorsId = newAuthorId;
                     context.SaveChanges();
                 }
                 else
@@ -320,15 +320,8 @@ namespace ShadyBookAppV2
 
 
          
-            string choiceAsString = ReturnInput("Choice which author you want to delete: ");
-            bool choice = int.TryParse(choiceAsString, out int choiceAsInt);
-
-            while (choice != true)
-            {
-                choiceAsString = ReturnInput("Please enter a number: ");
-                choice = int.TryParse(choiceAsString, out choiceAsInt);
-            }
-
+            int choiceAsInt = CheckUserInputInt(Console.ReadLine());
+          
             using (var context = new ShadyBookAppContext())
             {
                 var author = context.Authors.Find(choiceAsInt);
