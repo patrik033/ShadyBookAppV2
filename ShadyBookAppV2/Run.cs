@@ -494,7 +494,7 @@ namespace ShadyBookAppV2
         ulong CheckUserInputUlong(string input)
         {
             bool safe = ulong.TryParse(input, out ulong value);
-            while (safe == false)
+            while (value < 0 || safe == false)
 
             {
                 Console.WriteLine("Please enter a correct NUMBER: ");
@@ -507,16 +507,12 @@ namespace ShadyBookAppV2
         int CheckUserInputInt(string input)
         {
             bool safe = int.TryParse(input, out int value);
-            while (safe == false)
+            while (value < 0 || safe == false)
             {
-                Console.WriteLine("Please enter a correct NUMBER: ");
+                Console.Write("Not a accepted value, try again: ");        
                 input = Console.ReadLine();
+                Console.WriteLine();
                 safe = int.TryParse(input, out value);
-            }
-            if (value < 0)
-            {
-                Console.WriteLine("Can't add a negative value, try again");
-                CheckUserInputInt("Negative");
             }
             return value;
         }
@@ -524,7 +520,7 @@ namespace ShadyBookAppV2
         decimal CheckUserInputDecimal(string input)
         {
             bool safe = decimal.TryParse(input, out decimal value);
-            while (safe == false)
+            while (value < 0 || safe == false)
 
             {
                 Console.WriteLine("Please enter a correct NUMBER: ");
@@ -676,6 +672,10 @@ namespace ShadyBookAppV2
                         {
                             DeleteFromStore();
                             Console.WriteLine("Done");
+                            break;
+                        }
+                    case 19:
+                        {
                             break;
                         }
                     default:
