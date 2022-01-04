@@ -84,7 +84,7 @@ namespace ShadyBookAppV2
                 Console.Write("What store do you wish to stock up?: ");
                 int storeId = CheckUserInputInt(Console.ReadLine());
                 bool ifFindStore = context.Stores.Any(x => x.Id == storeId);
-                if (ifFindBook != true)
+                if (ifFindStore != true)
                 {
                     Console.WriteLine("Could not find store");
                     Console.ReadLine();
@@ -94,7 +94,7 @@ namespace ShadyBookAppV2
 
                 Console.WriteLine("How many book would you like to add: ");
                 int quantity = CheckUserInputInt(Console.ReadLine());
-
+                
 
 
 
@@ -250,7 +250,8 @@ namespace ShadyBookAppV2
             Console.Write("Please enter the book you want to update: ");
             string newBookId = Console.ReadLine();
             ulong updatedBookId = CheckUserInputUlong(newBookId);
-
+            
+           
 
             using (var context = new ShadyBookAppContext())
             {
@@ -302,6 +303,11 @@ namespace ShadyBookAppV2
                     author.AuthorsId = newAuthorId;
                     context.SaveChanges();
                 }
+                else
+                {
+                    Console.WriteLine("Book not found");
+                    Console.ReadLine();
+                }
             }
         }
         #endregion
@@ -314,15 +320,8 @@ namespace ShadyBookAppV2
 
 
          
-            string choiceAsString = ReturnInput("Choice which author you want to delete: ");
-            bool choice = int.TryParse(choiceAsString, out int choiceAsInt);
-
-            while (choice != true)
-            {
-                choiceAsString = ReturnInput("Please enter a number: ");
-                choice = int.TryParse(choiceAsString, out choiceAsInt);
-            }
-
+            int choiceAsInt = CheckUserInputInt(Console.ReadLine());
+          
             using (var context = new ShadyBookAppContext())
             {
                 var author = context.Authors.Find(choiceAsInt);
@@ -372,6 +371,7 @@ namespace ShadyBookAppV2
                 {
                     context.Entry(book).State = EntityState.Deleted;
                     context.SaveChanges();
+
                 }
                 else
                 {
@@ -406,7 +406,7 @@ namespace ShadyBookAppV2
                 Console.Write("What store do you wish to stock up?: ");
                 int storeId = CheckUserInputInt(Console.ReadLine());
                 bool ifFindStore = context.Stores.Any(x => x.Id == storeId);
-                if (ifFindBook != true)
+                if (ifFindStore != true)
                 {
                     Console.WriteLine("Could not find store");
                     Console.ReadLine();
@@ -491,7 +491,7 @@ namespace ShadyBookAppV2
         ulong CheckUserInputUlong(string input)
         {
             bool safe = ulong.TryParse(input, out ulong value);
-            while (safe == false)
+            while (value < 0 || safe == false)
 
             {
                 Console.WriteLine("Please enter a correct NUMBER: ");
@@ -504,10 +504,11 @@ namespace ShadyBookAppV2
         int CheckUserInputInt(string input)
         {
             bool safe = int.TryParse(input, out int value);
-            while (safe == false)
+            while (value < 0 || safe == false)
             {
-                Console.WriteLine("Please enter a correct NUMBER: ");
+                Console.Write("Not a accepted value, try again: ");        
                 input = Console.ReadLine();
+                Console.WriteLine();
                 safe = int.TryParse(input, out value);
             }
             return value;
@@ -516,8 +517,8 @@ namespace ShadyBookAppV2
         decimal CheckUserInputDecimal(string input)
         {
             bool safe = decimal.TryParse(input, out decimal value);
-            while (safe == false)
-            
+            while (value < 0 || safe == false)
+
             {
                 Console.WriteLine("Please enter a correct NUMBER: ");
                 input = Console.ReadLine();
@@ -674,6 +675,10 @@ namespace ShadyBookAppV2
                         {
                             Console.WriteLine("Done");
                             Console.ReadLine();
+                            break;
+                        }
+                    case 19:
+                        {
                             break;
                         }
                     default:
