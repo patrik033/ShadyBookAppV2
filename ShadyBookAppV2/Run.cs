@@ -84,7 +84,7 @@ namespace ShadyBookAppV2
                 Console.Write("What store do you wish to stock up?: ");
                 int storeId = CheckUserInputInt(Console.ReadLine());
                 bool ifFindStore = context.Stores.Any(x => x.Id == storeId);
-                if (ifFindBook != true)
+                if (ifFindStore != true)
                 {
                     Console.WriteLine("Could not find store");
                     Console.ReadLine();
@@ -407,7 +407,7 @@ namespace ShadyBookAppV2
                 Console.Write("What store do you wish to stock up?: ");
                 int storeId = CheckUserInputInt(Console.ReadLine());
                 bool ifFindStore = context.Stores.Any(x => x.Id == storeId);
-                if (ifFindBook != true)
+                if (ifFindStore != true)
                 {
                     Console.WriteLine("Could not find store");
                     Console.ReadLine();
