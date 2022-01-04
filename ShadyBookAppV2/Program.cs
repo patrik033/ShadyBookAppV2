@@ -10,7 +10,7 @@ run.Menu();
 
 
 
-Console.WriteLine("Färdig");
+Console.WriteLine("Done");
 Console.ReadLine();
 
 
