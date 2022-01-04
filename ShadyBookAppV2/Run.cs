@@ -677,10 +677,6 @@ namespace ShadyBookAppV2
                             Console.ReadLine();
                             break;
                         }
-                    case 19:
-                        {
-                            break;
-                        }
                     default:
                         {
                             Console.WriteLine("You entered an invalid option");
