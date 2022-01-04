@@ -97,7 +97,7 @@ namespace ShadyBookAppV2
 
                 Console.WriteLine("How many book would you like to add: ");
                 int quantity = CheckUserInputInt(Console.ReadLine());
-
+                
 
 
 
@@ -373,6 +373,7 @@ namespace ShadyBookAppV2
                 {
                     context.Entry(book).State = EntityState.Deleted;
                     context.SaveChanges();
+
                 }
                 else
                 {
@@ -512,11 +513,15 @@ namespace ShadyBookAppV2
         {
             bool safe = int.TryParse(input, out int value);
             while (safe == false)
-
             {
                 Console.WriteLine("Please enter a correct NUMBER: ");
                 input = Console.ReadLine();
                 safe = int.TryParse(input, out value);
+            }
+            if (value < 0)
+            {
+                Console.WriteLine("Can't add a negative value, try again");
+                CheckUserInputInt("Negative");
             }
             return value;
 
