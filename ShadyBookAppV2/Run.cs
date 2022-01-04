@@ -250,13 +250,14 @@ namespace ShadyBookAppV2
             Console.Write("Please enter the book you want to update: ");
             string newBookId = Console.ReadLine();
             ulong updatedBookId = CheckUserInputUlong(newBookId);
-
+            
+           
 
             using (var context = new ShadyBookAppContext())
             {
 
-                var author = context.Books.Find(updatedBookId);
-                if (author != null)
+                var book = context.Books.Find(updatedBookId);
+                if (book != null)
                 {
                     //date
                     string newDate = ReturnInput("Please enter a date to update, please use the format 'YYYY-MM-DD'.\nIf you don't enter it a default value will be entered: ");
@@ -295,12 +296,17 @@ namespace ShadyBookAppV2
                     decimal newUpdatedPrice = CheckUserInputDecimal(newPrice);
 
                     //updaterar
-                    author.Title = newTitle;
-                    author.Price = newUpdatedPrice;
-                    author.ReleaseDate = updatedDate;
-                    author.GenreId = newGenreId;
-                    author.AuthorsId = newAuthorId;
+                    book.Title = newTitle;
+                    book.Price = newUpdatedPrice;
+                    book.ReleaseDate = updatedDate;
+                    book.GenreId = newGenreId;
+                    book.AuthorsId = newAuthorId;
                     context.SaveChanges();
+                }
+                else
+                {
+                    Console.WriteLine("Book not found");
+                    Console.ReadLine();
                 }
             }
         }
